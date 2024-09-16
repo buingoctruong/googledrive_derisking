@@ -1,0 +1,38 @@
+server:
+  compression:
+    enabled: true
+  # Default port
+  port: 8080
+  # Enable graceful shutdown - Server will wait for active request to finish
+  shutdown: graceful
+  tomcat:
+    mbeanregistry:
+      enabled: true
+# Spring Configuration
+spring:
+  application:
+    name: googledrive_derisking
+# Swagger
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+# LION
+translation:
+  root:
+    folder-id:
+# Google Drive
+google:
+  drive:
+    type:
+    project-id:
+    private-key-id:
+    private-key:
+    client-email:
+    client-id:
+    auth-uri:
+    token-uri:
+    auth-provider-x509-cert-url:
+    client-x509-cert-url:
+    universe-domain:
