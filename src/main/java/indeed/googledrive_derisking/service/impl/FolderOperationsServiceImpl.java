@@ -7,10 +7,10 @@ import org.springframework.stereotype.Service;
 
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
-import com.google.api.services.drive.model.Permission;
 
 import indeed.googledrive_derisking.exceptions.FolderOperationException;
 import indeed.googledrive_derisking.service.FolderOperationsService;
+import indeed.googledrive_derisking.service.PermissionOperationsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -19,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class FolderOperationsServiceImpl implements FolderOperationsService {
     private final Drive googleDrive;
+    private final PermissionOperationsService permissionOperationsService;
     @Override
     public File createTo(final String parentFolderId, final String lionTicket) {
         // File's metadata.
@@ -32,7 +33,7 @@ public class FolderOperationsServiceImpl implements FolderOperationsService {
                     file.getId());
             // The created folder is accessible only by the service account.
             // Access permissions need to be granted to users or groups.
-            grantUserPermission(file);
+            permissionOperationsService.grantUserPermission(file, "buingoctruong1508@gmail.com");
             return file;
         } catch (IOException e) {
             throw new FolderOperationException(
@@ -80,21 +81,5 @@ public class FolderOperationsServiceImpl implements FolderOperationsService {
             throw new FolderOperationException("Unable to move file [%s] to the new folder [%s]."
                     .formatted(folderId, newParentFolderId), e);
         }
-    }
-
-    private void grantUserPermission(final File file) throws IOException {
-        final Permission permission = new Permission();
-        permission.setType("user");
-        permission.setRole("writer");
-        permission.setEmailAddress("buingoctruong1508@gmail.com");
-        googleDrive.permissions().create(file.getId(), permission).execute();
-    }
-
-    private void grantGroupPermission(final File file) throws IOException {
-        final Permission permission = new Permission();
-        permission.setType("group");
-        permission.setRole("writer");
-        permission.setEmailAddress("group@gmail.com");
-        googleDrive.permissions().create(file.getId(), permission).execute();
     }
 }
